@@ -6,6 +6,15 @@ RUN apk add --no-cache git gcc libc-dev \
 RUN GO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -tags netgo -installsuffix netgo -ldflags '-w' -o main .
 
 FROM scratch
+
+ARG BUILD_DATE="N/A"
+ARG VCS_REF="N/A"
+LABEL org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.vcs-url="https://github.com/cl3m3nt666/docker-error-alert.git" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.schema-version="1.0.0-rc1" \
+      maintainer="clement@le-corre.eu"
+
 ADD Go_Daddy_Class_2_CA.pem /etc/ssl/certs/
 COPY --from=builder /go/src/docker-worker/main .
 CMD ["./main"]
